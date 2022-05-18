@@ -1,9 +1,5 @@
-# Delivery_Back-End
-Projeto prático para praticar conceitos aprendidos no curso intensivo `Ignite`
-Projeto prático para alavancar conhecimentos no Back-End
-
-# Car Registration
-Projeto prático para praticar conceitos aprendidos no curso intensivo `Ignite`
+# Delivery Back-End🥙💨
+`Projeto prático` para alavancar conhecimentos no Back-End, adquiridos no curso intensivo `Ignite`, trilha `Node.Js`
 
 ![Captura de Tela (387)](https://user-images.githubusercontent.com/77081114/167625935-7ff9257e-6046-4302-bd72-694c458c7bdc.png)
 ![Captura de Tela (388)](https://user-images.githubusercontent.com/77081114/167625944-0ad718ca-f4a4-4417-8f96-2edc34d4f907.png)
