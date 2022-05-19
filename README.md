@@ -32,6 +32,7 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [ ] Upload de NF (Nota Fiscal)
 - [x] Cadastro de Entregas
 - [ ] Estado da Entrega - Entregue ou Pendente
+- [ ] Avaliação de Entregador
 
 # 💻 Sobre o projeto
 
