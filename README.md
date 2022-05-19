@@ -30,7 +30,7 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [x] Relacionamento entre Cliente e Entregas - Many to Many
 - [x] Relacionamento entre Entregadores e Entregas - Many to Many
 - [ ] Upload de NF (Nota Fiscal)
-- [ ] Cadastro de Entregas
+- [x] Cadastro de Entregas
 - [ ] Estado da Entrega - Entregue ou Pendente
 
 # 💻 Sobre o projeto
