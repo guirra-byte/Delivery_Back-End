@@ -40,7 +40,7 @@ const verifyDeliverymanAuthToken = async (request: Request, response: Response, 
       throw new AppError("This Deliveryman does exists!");
     }
 
-    request.user = {
+    request.deliveryman = {
 
       id: verifyAuthToken.sub
     }

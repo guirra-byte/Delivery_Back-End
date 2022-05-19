@@ -11,6 +11,8 @@ import { deliverymanAuthTokenRoutes } from "./Routes/DeliverymanAuthToken.routes
 import { clientRoutes } from './Routes/Client.routes';
 import { clientAuthTokenRoutes } from "./Routes/ClientAuthToken.routes";
 
+import { deliveryRoutes } from "./Routes/Delivery.routes";
+
 const PORT = 9978;
 
 app.use((error: Error, request: Request, response: Response, next: NextFunction) => {
@@ -33,6 +35,8 @@ app.use(deliverymanAuthTokenRoutes);
 
 app.use(clientRoutes);
 app.use(clientAuthTokenRoutes);
+
+app.use(deliveryRoutes);
 
 app.listen(PORT, () => {
 

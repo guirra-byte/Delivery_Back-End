@@ -1,0 +1,43 @@
+First Step of Delivery:
+  Client só poderá criar um pedido se estiver autenticado
+  Buscar o Id do Client pelo request.user;
+
+Second Step of Delivery:
+  Atrelar a entrega a um entregador autenticado
+  Buscar o Id do Deliveryman pelo request.user;
+  Forma e verificar se ele é um Client ou um Deliveryman;
+
+Last Step of Delivery:
+  Entregador faz a entrega e altera o estado do end_at 
+
+News Features of the Project:
+  Avaliação de Entregador 
+  Upload de NF
+  Verificar se o Deliveryman já possui um entrega pendente
+    Assim descartamos Deliveryman´s não disponíveis no momento
+
+Solução do problema de retorno:
+Solução mais rápida e eficaz que pensei rapidamente;
+
+.then(async (deliveries) => {
+
+       deliveries.map(async (delivery) => {
+
+         const findManyDeliveriesHasNoDeliverymanRequestProps:
+           IFindManyDeliveriesHasNoDeliverymanRequestProps = {
+
+           props: {
+
+             item_name: delivery.item_name,
+             client_id: delivery.client_id,
+             client: {
+
+               username: delivery.client.username,
+               id: delivery.client.id
+             }
+           }
+         }
+
+         return findManyDeliveriesHasNoDeliverymanRequestProps;
+       });
+     });
