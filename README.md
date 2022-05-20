@@ -57,6 +57,12 @@ Isso irá me ajudar a entender e exercitar os diferentes tipos de aplicações e
 ![MySQL](https://img.shields.io/badge/MySQL-316192?style=for-the-badge&logo=mysql&logoColor=white)
 ![Prisma](https://img.shields.io/badge/Prisma-0a9396?style=for-the-badge&logo=prisma&logoColor=white)
 
+# 👑 Desafios:
+- [ ] Implementação de Testes de Intregação
+- [ ] Implementação de Testes Unitários
+- [ ] Front-End com React.Js
+- [ ] Integração com GitHub OAuth
+
 
 
 
