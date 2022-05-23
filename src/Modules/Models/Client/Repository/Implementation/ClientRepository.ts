@@ -1,17 +1,15 @@
 import { IClientRepository } from "../IClientRepository";
 import { IClientRequestProps } from "../IClientRepository";
 import { prisma } from "../../../../../Prisma/Client/Client.prisma";
-import { Client } from "../../Model/Client";
+import { Client } from "@prisma/client";
 import { Delivery } from "@prisma/client";
+import { Client as ClientEntity } from "../../Model/Client";
 
-interface IClientDeliveriesRequestProps {
+export interface IFindClientRequestProps {
 
-  props: {
-
-    username: string
-    password: string
-  },
-  deliveries: Delivery[]
+  username: string,
+  id: string,
+  delivery: Delivery[]
 }
 
 export class ClientRepository implements IClientRepository {
@@ -42,7 +40,7 @@ export class ClientRepository implements IClientRepository {
       id: id
     }
 
-    const createClientInEntity = new Client(clientProps);
+    const createClientInEntity = new ClientEntity(clientProps);
 
     const client = await this
       .repository
@@ -58,40 +56,7 @@ export class ClientRepository implements IClientRepository {
 
   }
 
-  async findOne({ username, password }: IClientRequestProps): Promise<Client | null> {
-
-    const findClient = await this
-      .repository
-      .client
-      .findUnique(
-        {
-          where: { username: username },
-          include: {
-
-            delivery: true
-          }
-        });
-
-    if (findClient !== null) {
-
-      const findClientRequestProps: IClientDeliveriesRequestProps = {
-
-        props: {
-
-          username: username,
-          password: "Particular Information",
-        },
-
-        deliveries: findClient.delivery
-      }
-
-      return findClientRequestProps
-    }
-
-    return findClient
-  }
-
-  async findById(sub: string): Promise<Client | null> {
+  async findById(sub: string): Promise<(Client & { delivery: Delivery[] }) | null> {
 
     const findUser = await this
       .repository
@@ -105,23 +70,21 @@ export class ClientRepository implements IClientRepository {
           }
         });
 
-    if (findUser !== null) {
-
-      const findClientByIdRequestProps: IClientDeliveriesRequestProps = {
-
-        props: {
-
-          username: findUser.username,
-          password: "Particular Information",
-
-        },
-        deliveries: findUser.delivery
-      }
-
-      return findClientByIdRequestProps
-
-    }
-
     return findUser;
+  }
+
+  async findAllDeliveries(client_token: string): Promise<(Client & { delivery: Delivery[] })[]> {
+
+    const findAllClientDeliveries = await this.repository.client.findMany({
+
+      where: { id: client_token },
+      include: {
+
+        delivery: true,
+
+      }
+    })
+
+    return findAllClientDeliveries;
   }
 }

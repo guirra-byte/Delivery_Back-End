@@ -13,6 +13,7 @@ model Client {
   password String
   username String @unique
 
+  notes    NotaFiscal[]
   delivery Delivery[]
   @@map("clients")
 }
@@ -29,15 +30,29 @@ model Deliveryman {
 
 model Delivery {
 
-  id             String   @id @default(uuid())
+  id             String    @id @default(uuid())
   item_name      String
   deliveryman_id String?
   client_id      String
-  created_at     DateTime @default(now())
+  created_at     DateTime  @default(now())
   end_at         DateTime?
 
-  client      Client      @relation(fields: [client_id], references: [id])
+  client      Client       @relation(fields: [client_id], references: [id])
   deliveryman Deliveryman? @relation(fields: [deliveryman_id], references: [id])
+  notes       NotaFiscal[]
 
   @@map("deliveries")
+}
+
+model NotaFiscal {
+
+  id         String   @id @default(uuid())
+  client     Client   @relation(fields: [client_id], references: [id])
+  client_id  String
+  item       Delivery @relation(fields: [item_id], references: [id])
+  item_id    String
+  upload     String
+  created_at DateTime @default(now())
+
+  @@map("notes")
 }

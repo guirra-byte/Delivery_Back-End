@@ -4,6 +4,7 @@ import { compare } from "bcryptjs";
 import { IClientRepository } from "../../../../Repository/IClientRepository";
 import { IClientRequestProps } from "../../../../Repository/IClientRepository";
 import { AppError } from "../../../../../../Errors/AppError";
+import { prisma } from "../../../../../../../Prisma/Client/Client.prisma";
 
 export const tokenHash = "81699db278981865730c39c9aaaca1ad";
 
@@ -13,16 +14,16 @@ export class CreateClientAuthTokenUseCase {
 
   async execute({ username, password }: IClientRequestProps) {
 
-    const verifyClientAlreadyExists = await this
-      .clientRepository
-      .findOne({ username, password });
+    const verifyClientAlreadyExists = await prisma
+      .client
+      .findUnique({ where: { username: username } });
 
     if (!verifyClientAlreadyExists) {
 
       throw new AppError("Username or Password are incorrect!");
     }
 
-    const verifyPassword = compare(password, verifyClientAlreadyExists.props.password)
+    const verifyPassword = await compare(password, verifyClientAlreadyExists.password)
 
     if (!verifyPassword) {
 
@@ -31,7 +32,7 @@ export class CreateClientAuthTokenUseCase {
 
     const authToken = sign({}, tokenHash, {
 
-      subject: verifyClientAlreadyExists.props.id,
+      subject: verifyClientAlreadyExists.id,
       expiresIn: "1d"
     });
 

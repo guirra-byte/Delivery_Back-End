@@ -1,8 +1,15 @@
 import { prisma } from "../../../../../Prisma/Client/Client.prisma";
-import { Delivery as DeliveryClient } from "@prisma/client";
+import { Client, Delivery as DeliveryClient } from "@prisma/client";
+
 import { Delivery } from "../../Model/Delivery";
+
 import { IDeliveryRepository } from "../IDeliveryRepository";
 import { IDeliveryRequestProps } from '../IDeliveryRepository';
+
+export interface IUpdateEndDateBatchPayloadRequestProps {
+
+  count: number
+}
 
 export interface IFindDeliveryRequestProps {
 
@@ -114,8 +121,9 @@ export class DeliveryRepository implements IDeliveryRepository {
       .findMany(
         {
           where: {
-            deliveryman: undefined,
-            deliveryman_id: undefined
+            deliveryman: null,
+            deliveryman_id: null,
+            end_at: null
           },
           include: {
 
@@ -124,6 +132,84 @@ export class DeliveryRepository implements IDeliveryRepository {
         });
 
     return findManyDeliveriesHasNoDeliveryman;
+  }
+
+  async updateDeliveryDeliveryman(item_id: string, client_id: string): Promise<(DeliveryClient & { client: Client } | null)> {
+
+    const findDeliveryman = await this
+      .repository
+      .deliveryman
+      .findFirst();
+
+    if (findDeliveryman === null) {
+
+      return findDeliveryman;
+
+    }
+
+    const findClient = await this
+      .repository
+      .client
+      .findUnique({ where: { id: client_id } });
+
+    if (findClient === null) {
+
+      return findClient;
+    }
+
+    const updateDeliverymanInDelivery = await this
+      .repository
+      .delivery
+      .update({
+
+        where: { id: item_id },
+        data: {
+
+          deliveryman_id: findDeliveryman.id,
+          client_id: findClient.id
+
+        },
+        include: { client: true }
+      });
+
+    return updateDeliverymanInDelivery;
+  }
+
+  async updateDeliveryEndDate(delivery_id: string): Promise<IUpdateEndDateBatchPayloadRequestProps | null> {
+
+    const findRandomDeliveryman = await this
+      .repository
+      .deliveryman
+      .findFirst();
+
+    if (findRandomDeliveryman === null) {
+
+      return findRandomDeliveryman
+    }
+
+    const updateDeliveryEndDate = await this
+      .repository
+      .delivery
+      .updateMany(
+        {
+          where: {
+            id: delivery_id,
+            deliveryman_id: findRandomDeliveryman.id
+          },
+
+          data: {
+
+            end_at: new Date()
+
+          }
+        });
+
+    const updateEndDateBatchPayloadRequestProps: IUpdateEndDateBatchPayloadRequestProps = {
+
+      count: updateDeliveryEndDate.count
+    }
+
+    return updateEndDateBatchPayloadRequestProps;
   }
 }
 

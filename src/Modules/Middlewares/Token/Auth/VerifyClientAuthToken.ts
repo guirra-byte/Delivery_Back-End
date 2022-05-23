@@ -4,14 +4,12 @@ import { tokenHash } from '../../../Models/Client/Services/UseCase/Token/Auth/Cr
 import { ClientRepository } from '../../../Models/Client/Repository/Implementation/ClientRepository';
 import { AppError } from '../../../Errors/AppError';
 
-interface IClientPayloadRequestProps {
+import { prisma } from '../../../../Prisma/Client/Client.prisma';
 
-  token: string,
-  user: {
+interface IPayload {
 
-    username: string
-    id: string
-  }
+  username: string,
+  sub: string
 }
 
 const verifyClientAuthToken = async (request: Request, response: Response, next: NextFunction) => {
@@ -28,22 +26,31 @@ const verifyClientAuthToken = async (request: Request, response: Response, next:
 
   try {
 
-    const verifyAuthToken = verify(authToken, tokenHash) as IClientPayloadRequestProps;
+    const verifyAuthToken = verify(authToken, tokenHash) as IPayload;
 
-    const clientRepository = ClientRepository
-      .getInstance();
 
-    const findClientBySub = await clientRepository
-      .findById(verifyAuthToken.user.id);
+    const findClientBySub = await prisma
+      .client
+      .findUnique(
+        {
+          where: { id: verifyAuthToken.sub },
+          select: {
 
-    if (!findClientBySub) {
+            delivery: true,
+            username: true,
+            id: true,
+            password: false
+          }
+        });
 
-      throw new AppError("This Client does exists!");
+    if (findClientBySub === null) {
+
+      throw new AppError("This Client does exists!", 404);
     }
 
-    request.user = {
+    request.client = {
 
-      id: verifyAuthToken.user.id
+      id: verifyAuthToken.sub
     }
 
     next();
@@ -52,7 +59,7 @@ const verifyClientAuthToken = async (request: Request, response: Response, next:
 
     return response
       .status(400)
-      .send(exception);
+      .json({ message: `Your application have a error: ${exception}` });
   }
 }
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
-import { verifyDeliverymanAlreadyExists } from '../Modules/Middlewares/VerifyDeliverymanAlreadyExists';
-import { createDeliverymanAuthTokenController } from '../Modules/Models/Deliveryman/Services/UseCase/Token/Auth';
+import { verifyDeliverymanAlreadyExists } from '../../Modules/Middlewares/VerifyDeliverymanAlreadyExists';
+import { createDeliverymanAuthTokenController } from '../../Modules/Models/Deliveryman/Services/UseCase/Token/Auth';
 
 const deliverymanAuthTokenRoutes = Router();
 

@@ -1,4 +1,5 @@
-import { Client } from "../Model/Client"
+import { Client } from "@prisma/client";
+import { Delivery } from "@prisma/client";
 
 export interface IClientRequestProps {
 
@@ -10,6 +11,6 @@ export interface IClientRequestProps {
 export interface IClientRepository {
 
   create({ username, password, id }: IClientRequestProps): Promise<void>
-  findOne({ username }: IClientRequestProps): Promise<Client | null>
-  findById(sub: string): Promise<Client | null>
+  findById(sub: string): Promise<(Client & { delivery: Delivery[] }) | null>
+  findAllDeliveries(client_token: string): Promise<(Client & { delivery: Delivery[] })[]>
 }

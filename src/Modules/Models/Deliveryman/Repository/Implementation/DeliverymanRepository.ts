@@ -1,7 +1,15 @@
 import { IDeliverymanProps, IDeliverymanRepository } from "../IDeliverymanRepository";
 import { prisma } from "../../../../../Prisma/Client/Client.prisma";
+import { Deliveryman as DeliverymanClient } from "@prisma/client";
 import { Deliveryman } from "../../Model/Deliveryman";
+import { Delivery } from "@prisma/client";
 
+export interface IFindDeliverymanRequestProps {
+
+  username: string,
+  id: string,
+  delivery: Delivery[]
+}
 
 export class DeliverymanRepository implements IDeliverymanRepository {
 
@@ -11,7 +19,7 @@ export class DeliverymanRepository implements IDeliverymanRepository {
 
   public static getInstance(): DeliverymanRepository {
 
-    if (DeliverymanRepository.INSTANCE) {
+    if (!DeliverymanRepository.INSTANCE) {
 
       DeliverymanRepository.INSTANCE = new DeliverymanRepository(prisma);
     }
@@ -19,7 +27,7 @@ export class DeliverymanRepository implements IDeliverymanRepository {
     return DeliverymanRepository.INSTANCE;
   }
 
-  async create({ username, password }: IDeliverymanProps): Promise<Deliveryman> {
+  async create({ username, password }: IDeliverymanProps): Promise<DeliverymanClient> {
 
     const deliverymanProps = {
 
@@ -40,20 +48,11 @@ export class DeliverymanRepository implements IDeliverymanRepository {
         }
       });
 
-    const createDeliverymanRequestProps: Deliveryman = {
-
-      props: {
-
-        username: username,
-        password: password
-      }
-    }
-
-    return createDeliverymanRequestProps;
+    return deliveryman;
 
   }
 
-  async findOne(username: string): Promise<Deliveryman | null> {
+  async findOne(username: string): Promise<IFindDeliverymanRequestProps | null> {
 
     const findDeliveryman = await this
       .repository
@@ -61,21 +60,21 @@ export class DeliverymanRepository implements IDeliverymanRepository {
       .findUnique(
         {
           where: { username: username },
-          include: {
+          select: {
 
-            delivery: true
+            username: true,
+            delivery: true,
+            id: true
           }
         });
 
     if (findDeliveryman !== null) {
 
-      const findDeliverymanRequestProps: Deliveryman = {
+      const findDeliverymanRequestProps: IFindDeliverymanRequestProps = {
 
-        props: {
-
-          username: findDeliveryman.username,
-          password: findDeliveryman.password
-        }
+        username: findDeliveryman.username,
+        id: findDeliveryman.id,
+        delivery: findDeliveryman.delivery
       }
 
       return findDeliverymanRequestProps;
@@ -84,27 +83,18 @@ export class DeliverymanRepository implements IDeliverymanRepository {
     return findDeliveryman;
   }
 
-  async findById(sub: string): Promise<Deliveryman | null> {
+  async findAllDeliverymanDeliveries(deliveryman_token: string): Promise<{ delivery: Delivery[]; } | null> {
 
     const findDeliverymanById = await this
       .repository
       .deliveryman
-      .findUnique({ where: { id: sub } });
-
-    if (findDeliverymanById !== null) {
-
-      const findDeliverymanByIdRequestProps: Deliveryman = {
-
-        props: {
-
-          username: findDeliverymanById.username,
-          password: findDeliverymanById.password
-        }
-      }
-
-      return findDeliverymanByIdRequestProps;
-
-    }
+      .findUnique(
+        {
+          where: { id: deliveryman_token },
+          select: {
+            delivery: true
+          }
+        });
 
     return findDeliverymanById;
   }

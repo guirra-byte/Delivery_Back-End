@@ -5,11 +5,11 @@ import { AppError } from "./Modules/Errors/AppError";
 
 import { app } from "./app";
 
-import { deliverymanRoutes } from "./Routes/Deliveryman.routes";
-import { deliverymanAuthTokenRoutes } from "./Routes/DeliverymanAuthToken.routes";
+import { deliverymanRoutes } from "./Routes/Deliveryman/Deliveryman.routes";
+import { deliverymanAuthTokenRoutes } from "./Routes/Deliveryman/DeliverymanAuthToken.routes";
 
-import { clientRoutes } from './Routes/Client.routes';
-import { clientAuthTokenRoutes } from "./Routes/ClientAuthToken.routes";
+import { clientRoutes } from "./Routes/Client/Client.routes";
+import { clientAuthTokenRoutes } from "./Routes/Client/ClientAuthToken.routes";
 
 import { deliveryRoutes } from "./Routes/Delivery.routes";
 

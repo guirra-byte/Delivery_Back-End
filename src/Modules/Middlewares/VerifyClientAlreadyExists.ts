@@ -1,15 +1,14 @@
 import { Request, Response, NextFunction } from 'express';
+import { prisma } from '../../Prisma/Client/Client.prisma';
 import { ClientRepository } from '../Models/Client/Repository/Implementation/ClientRepository';
 
 const verifyClientAlreadyExists = async (request: Request, response: Response, next: NextFunction) => {
 
   const { username } = request.body;
 
-  const clientRepository = ClientRepository
-    .getInstance();
-
-  const findClientUsername = await clientRepository
-    .findOne(username);
+  const findClientUsername = await prisma
+    .client
+    .findUnique({ where: { username: username } });
 
   if (findClientUsername) {
 

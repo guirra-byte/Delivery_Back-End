@@ -4,6 +4,7 @@ import { CreateDeliverymanUseCase } from './CreateDeliverymanUseCase';
 export class CreateDeliverymanController {
 
   constructor(private createDeliverymanUseCase: CreateDeliverymanUseCase) { }
+
   async handle(request: Request, response: Response) {
 
     const { username, password } = request.body;
@@ -12,17 +13,17 @@ export class CreateDeliverymanController {
 
       const createDeliveryman = await this
         .createDeliverymanUseCase
-        .execute(username, password);
+        .execute({ username, password });
 
       return response
         .status(201)
-        .send();
+        .send(createDeliveryman);
     }
     catch (exception) {
 
       return response
         .status(400)
-        .send();
+        .json({ message: `Your application have a error: ${exception}` });
     }
   }
 }

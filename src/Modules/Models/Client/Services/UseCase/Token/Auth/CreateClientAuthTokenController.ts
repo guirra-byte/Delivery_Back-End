@@ -17,7 +17,7 @@ export class CreateClientAuthTokenController {
 
       return response
         .status(200)
-        .send();
+        .json({ createClientAuthToken });
     }
     catch (exception) {
 
