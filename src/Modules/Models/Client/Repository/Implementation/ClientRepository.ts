@@ -8,8 +8,7 @@ import { Client as ClientEntity } from "../../Model/Client";
 export interface IFindClientRequestProps {
 
   username: string,
-  id: string,
-  delivery: Delivery[]
+  id?: string,
 }
 
 export class ClientRepository implements IClientRepository {
@@ -37,7 +36,7 @@ export class ClientRepository implements IClientRepository {
 
       username: username,
       password: password,
-      id: id
+      id: id,
     }
 
     const createClientInEntity = new ClientEntity(clientProps);
@@ -56,7 +55,7 @@ export class ClientRepository implements IClientRepository {
 
   }
 
-  async findById(sub: string): Promise<(Client & { delivery: Delivery[] }) | null> {
+  async findById(sub: string): Promise<IFindClientRequestProps | null> {
 
     const findUser = await this
       .repository
@@ -64,8 +63,10 @@ export class ClientRepository implements IClientRepository {
       .findUnique(
         {
           where: { id: sub },
-          include: {
+          select: {
 
+            username: true,
+            id: true,
             delivery: true
           }
         });
@@ -73,18 +74,27 @@ export class ClientRepository implements IClientRepository {
     return findUser;
   }
 
-  async findAllDeliveries(client_token: string): Promise<(Client & { delivery: Delivery[] })[]> {
+  async findAllDeliveries(client_token: string): Promise<Delivery[]> {
 
-    const findAllClientDeliveries = await this.repository.client.findMany({
+    const findAllClientDeliveries = await this
+      .repository
+      .delivery
+      .findMany({
 
-      where: { id: client_token },
-      include: {
+        where: { client_id: client_token },
 
-        delivery: true,
-
-      }
-    })
+      });
 
     return findAllClientDeliveries;
+  }
+
+  async findByUsername(username: string): Promise<IFindClientRequestProps | undefined | null> {
+
+    const findByUsername = await this
+      .repository
+      .client
+      .findUnique({ where: { username: username } });
+
+    return findByUsername
   }
 }
