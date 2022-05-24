@@ -65,9 +65,10 @@ Isso irá me ajudar a entender e exercitar os diferentes tipos de aplicações e
 ![Prisma](https://img.shields.io/badge/Prisma-0a9396?style=for-the-badge&logo=prisma&logoColor=white)
 
 # 👑 Desafios:
-- [ ] Implementação de Testes de Intregação
-- [ ] Implementação de Testes Unitários
-  - [x] Teste de Criação de Client    
+- [ ] Implementação de **`Testes de Intregação`**
+- [ ] Implementação de **`Testes Unitários`**
+  - [x] Teste de Criação de Client 
+  - [ ] Teste de Verificação de Client já existente   
   - [ ] Teste de Criação de Deliveryman
 - [ ] Front-End com React.Js
 - [ ] Integração com GitHub OAuth
