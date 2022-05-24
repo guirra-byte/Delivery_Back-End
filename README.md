@@ -47,6 +47,11 @@ Neste projeto, foi colocado em prática conteúdos aprendidos:
 - Integração de **API** com **Banco de Dados Relacional** `MySQL` via ORM **`Prisma.io`**
   > Prisma.io deferentemente dos ORM´s padrão tem uma facilidade maior na criação de **Relacionamentos** entre as tabelas. O objetivo do Prisma.io é tornar nós Dev´s mais **produtivos** ao criarmos `Queries` de consulta **`SQL`**.
 - **Autenticação Permissiva** nas rotas com **`JWT`**
+<br>
+
+- Implementação de `Testes Unitários`: 
+ > Os Teste Unitários são aqueles que são implementados apenas em alguns **pedaços** da aplicação, como **Services**, **UseCases**...
+ > Resumindo, o foco central dos Testes Unitários são as **`Regras de Negócios`**.
 
 
 Isso irá me ajudar a entender e exercitar os diferentes tipos de aplicações e estruturas que podemos fazer.
@@ -61,6 +66,7 @@ Isso irá me ajudar a entender e exercitar os diferentes tipos de aplicações e
 - [ ] Implementação de Testes de Intregação
 - [ ] Implementação de Testes Unitários
   - [x] Teste de Criação de Client    
+  - [ ] Teste de Criação de Deliveryman
 - [ ] Front-End com React.Js
 - [ ] Integração com GitHub OAuth
 
