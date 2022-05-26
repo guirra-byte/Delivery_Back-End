@@ -1,7 +1,6 @@
 import { IClientRepository, IClientRequestProps } from '../IClientRepository';
 import { Client } from '../../Model/Client';
-import { Client as ClientPrisma, Delivery } from '@prisma/client';
-import { IFindClientRequestProps } from '../Implementation/ClientRepository';
+import { Client as ClientPrisma } from '@prisma/client';
 
 export class ClientRepositoryInMemory implements IClientRepository {
 
@@ -32,37 +31,37 @@ export class ClientRepositoryInMemory implements IClientRepository {
 
   }
 
-  async findById(sub: string): Promise<IFindClientRequestProps | null | undefined> {
+  async findById(sub: string): Promise<Client | undefined> {
 
     const findClientById = await this
       .client
       .find((client) => sub === client.props.id);
 
-    return findClientById?.props
+    if (findClientById !== undefined && findClientById.props.id !== undefined) {
+
+      const client: Client = {
+
+        props: {
+
+          username: findClientById.props.username,
+          password: findClientById.props.password,
+          id: findClientById.props.id
+        }
+      }
+
+      return client;
+    }
+
+    return findClientById;
   }
 
-  // async findAllDeliveries(client_token: string): Promise<Delivery[] | undefined> {
 
-  //   const findUser = await this
-  //     .client
-  //     .find((clients) => client_token === clients.props.id);
-
-  //   if (findUser === undefined) {
-
-  //     return findUser;
-
-  //   }
-
-  //   const findDeliveries = await findUser
-  //     .props
-  // }
-
-  async findByUsername(username: string): Promise<IFindClientRequestProps | undefined> {
+  async findByUsername(username: string): Promise<Client | undefined> {
 
     const findClient = this
       .client
       .find((client) => username === client.props.username);
 
-    return findClient?.props
+    return findClient
   }
 }

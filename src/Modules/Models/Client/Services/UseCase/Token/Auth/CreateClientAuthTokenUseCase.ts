@@ -8,35 +8,60 @@ import { prisma } from "../../../../../../../Prisma/Client/Client.prisma";
 
 export const tokenHash = "81699db278981865730c39c9aaaca1ad";
 
+export interface ITokenRequestReturnProps {
+
+  token: string,
+  user: {
+
+    username: string,
+    id: string
+  }
+}
+
 export class CreateClientAuthTokenUseCase {
 
   constructor(private clientRepository: IClientRepository) { }
 
   async execute({ username, password }: IClientRequestProps) {
 
-    const verifyClientAlreadyExists = await prisma
-      .client
-      .findUnique({ where: { username: username } });
+    const verifyClientAlreadyExists = await this
+      .clientRepository
+      .findByUsername(username);
 
-    if (!verifyClientAlreadyExists) {
+    if (verifyClientAlreadyExists === undefined
+      || verifyClientAlreadyExists === null || verifyClientAlreadyExists.props.id === undefined) {
 
       throw new AppError("Username or Password are incorrect!");
     }
 
-    const verifyPassword = await compare(password, verifyClientAlreadyExists.password)
+    const verifyPassword = await compare(password, verifyClientAlreadyExists.props.password)
 
     if (!verifyPassword) {
 
       throw new AppError("Username or Password are incorrect!");
     }
 
+    const { id } = verifyClientAlreadyExists.props;
+
     const authToken = sign({}, tokenHash, {
 
-      subject: verifyClientAlreadyExists.id,
+      subject: id,
       expiresIn: "1d"
     });
 
-    return authToken;
+
+
+    const tokenRequestReturnProps: ITokenRequestReturnProps = {
+
+      token: authToken,
+      user: {
+
+        username: verifyClientAlreadyExists.props.username,
+        id: id
+      }
+    }
+
+    return tokenRequestReturnProps;
 
   }
 

@@ -1,4 +1,4 @@
-import { Client } from "@prisma/client";
+import { Client } from "../../../Model/Client";
 import { ClientRepositoryInMemory } from "../../../Repository/in-memory/ClientRepositoryInMemory";
 import { CreateClientUseCase } from "./CreateClientUseCase";
 import { AppError } from '../../../../../Errors/AppError';
@@ -29,15 +29,17 @@ describe("Create Client", () => {
       .findByUsername
       (client.username);
 
-    expect(findUser)
+    const findProps = findUser?.props
+
+    expect(findProps)
       .toHaveProperty("id");
 
-    expect(findUser)
+    expect(findProps)
       .not
       .toBeUndefined();
     //Rejeitar valor Undefined
 
-    expect(findUser)
+    expect(findProps)
       .not
       .toBeNull();
     //Rejeitar Valor Null  
@@ -50,16 +52,22 @@ describe("Create Client", () => {
 
       const client: Client = {
 
-        username: "Client Username Test",
-        password: "Client Password Test",
-        id: "Client Id Test"
+        props: {
+
+          username: "Client Username Test",
+          password: "Client Password Test",
+          id: "Client Id Test"
+        }
       }
 
-      await createClientUseCase
-        .execute(client.username, client.password);
+      const { username, password } = client.props;
 
       await createClientUseCase
-        .execute(client.username, client.password);
+        .execute(username, password);
+
+      await createClientUseCase
+        .execute(username, password);
+
     }).rejects
       .toBeInstanceOf(AppError);
   });

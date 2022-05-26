@@ -1,6 +1,7 @@
 import { Deliveryman } from "@prisma/client";
 import { Delivery } from "@prisma/client";
 import { IFindDeliverymanRequestProps } from './Implementation/DeliverymanRepository';
+import { IFindOneDeliveryman } from "./Implementation/DeliverymanRepository";
 
 export interface IDeliverymanProps {
 
@@ -10,7 +11,7 @@ export interface IDeliverymanProps {
 
 export interface IDeliverymanRepository {
 
-  create({ username, password }: IDeliverymanProps): Promise<Deliveryman>
-  findOne(username: string): Promise<IFindDeliverymanRequestProps | null>
-  findAllDeliverymanDeliveries(deliveryman_token: string): Promise<{ delivery: Delivery[]; } | null>
+  create({ username, password }: IDeliverymanProps): Promise<void>
+  findOne(username: string): Promise<IFindOneDeliveryman | null | undefined>
+  findAllDeliverymanDeliveries(deliveryman_token: string): Promise<IFindDeliverymanRequestProps | null | undefined>
 }

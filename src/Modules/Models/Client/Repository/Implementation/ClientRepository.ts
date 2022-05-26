@@ -5,12 +5,6 @@ import { Client } from "@prisma/client";
 import { Delivery } from "@prisma/client";
 import { Client as ClientEntity } from "../../Model/Client";
 
-export interface IFindClientRequestProps {
-
-  username: string,
-  id?: string,
-}
-
 export class ClientRepository implements IClientRepository {
 
   private constructor(private repository: typeof prisma) {
@@ -55,7 +49,7 @@ export class ClientRepository implements IClientRepository {
 
   }
 
-  async findById(sub: string): Promise<IFindClientRequestProps | null> {
+  async findById(sub: string): Promise<Client | null> {
 
     const findUser = await this
       .repository
@@ -67,7 +61,7 @@ export class ClientRepository implements IClientRepository {
 
             username: true,
             id: true,
-            delivery: true
+            password: true
           }
         });
 
@@ -88,12 +82,20 @@ export class ClientRepository implements IClientRepository {
     return findAllClientDeliveries;
   }
 
-  async findByUsername(username: string): Promise<IFindClientRequestProps | undefined | null> {
+  async findByUsername(username: string): Promise<Client | null> {
 
     const findByUsername = await this
       .repository
       .client
-      .findUnique({ where: { username: username } });
+      .findUnique({
+        where: { username: username },
+        select: {
+
+          username: true,
+          id: true,
+          password: true
+        }
+      });
 
     return findByUsername
   }

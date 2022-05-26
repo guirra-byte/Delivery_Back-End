@@ -8,7 +8,14 @@ export interface IFindDeliverymanRequestProps {
 
   username: string,
   id: string,
-  delivery: Delivery[]
+  delivery?: Delivery[]
+}
+
+export interface IFindOneDeliveryman {
+
+  username: string
+  id: string
+  delivery?: Delivery[]
 }
 
 export class DeliverymanRepository implements IDeliverymanRepository {
@@ -27,7 +34,7 @@ export class DeliverymanRepository implements IDeliverymanRepository {
     return DeliverymanRepository.INSTANCE;
   }
 
-  async create({ username, password }: IDeliverymanProps): Promise<DeliverymanClient> {
+  async create({ username, password }: IDeliverymanProps): Promise<void> {
 
     const deliverymanProps = {
 
@@ -48,11 +55,9 @@ export class DeliverymanRepository implements IDeliverymanRepository {
         }
       });
 
-    return deliveryman;
-
   }
 
-  async findOne(username: string): Promise<IFindDeliverymanRequestProps | null> {
+  async findOne(username: string): Promise<IFindOneDeliveryman | null> {
 
     const findDeliveryman = await this
       .repository
@@ -68,22 +73,10 @@ export class DeliverymanRepository implements IDeliverymanRepository {
           }
         });
 
-    if (findDeliveryman !== null) {
-
-      const findDeliverymanRequestProps: IFindDeliverymanRequestProps = {
-
-        username: findDeliveryman.username,
-        id: findDeliveryman.id,
-        delivery: findDeliveryman.delivery
-      }
-
-      return findDeliverymanRequestProps;
-    }
-
     return findDeliveryman;
   }
 
-  async findAllDeliverymanDeliveries(deliveryman_token: string): Promise<{ delivery: Delivery[]; } | null> {
+  async findAllDeliverymanDeliveries(deliveryman_token: string): Promise<IFindDeliverymanRequestProps | null> {
 
     const findDeliverymanById = await this
       .repository
@@ -92,7 +85,9 @@ export class DeliverymanRepository implements IDeliverymanRepository {
         {
           where: { id: deliveryman_token },
           select: {
-            delivery: true
+            delivery: true,
+            username: true,
+            id: true
           }
         });
 

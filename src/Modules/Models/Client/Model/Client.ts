@@ -7,6 +7,8 @@ type ClientRequestProps = {
   username: string
   password: string
   id?: string
+  notes?: string[]
+  delivery?: string[]
 }
 
 export class Client extends Entity<ClientRequestProps>{
