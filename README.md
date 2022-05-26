@@ -69,7 +69,7 @@ Isso irá me ajudar a entender e exercitar os diferentes tipos de aplicações e
 - [ ] Implementação de **`Testes de Intregação`**
 - [ ] Implementação de **`Testes Unitários`**
   - [x] Teste de Criação de Client 
-  - [ ] Teste de Verificação de Client já existente   
+  - [x] Teste de Verificação de Client já existente   
   - [ ] Teste de Criação de Deliveryman
 - [ ] Front-End com React.Js
 - [ ] Integração com GitHub OAuth
